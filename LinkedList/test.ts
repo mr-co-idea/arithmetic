@@ -1,6 +1,6 @@
 // 测试用例
 
-import { LinkedList } from "./LinkedList";
+import { LinkedList } from ".";
 
 // 初始化链表
 const cities: LinkedList<string> = new LinkedList();

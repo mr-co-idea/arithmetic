@@ -1,6 +1,6 @@
 // 测试用例
 
-import { Queue } from './Queue';
+import { Queue } from '.';
 import { log } from '../utils';
 
 // 初始化队列

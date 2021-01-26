@@ -1,6 +1,6 @@
 // 测试用例
 import { log } from '../utils'
-import { List } from './List';
+import { List } from '.';
 
 const names:List<string> = new List();
 

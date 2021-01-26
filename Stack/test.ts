@@ -1,5 +1,5 @@
 // 测试用例
-import { Stack } from './stack';
+import { Stack } from '.';
 import { log } from '../utils'
 
 // 初始化栈
