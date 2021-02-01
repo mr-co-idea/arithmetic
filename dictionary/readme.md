@@ -18,6 +18,7 @@
 | remove() | 删除键值 |
 | find() | 查找键值 |
 | showAll() | 显示所有键值 |
+| showAllSort() | 排序显示所有键值 |
 | clear() | 清空 |
 
 
