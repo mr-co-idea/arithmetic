@@ -1,1 +1,1 @@
-export const log: any = (ctt: unknown) => console.info(ctt);
+export const log: any = (...ctt: unknown[]) => console.info(...ctt);
