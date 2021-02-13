@@ -1,9 +1,13 @@
 // 数据测试平台类
 
+import { setServers } from "dns";
+import { log } from "../../../utils/log";
+
 export class CArray {
 	dataStore: number[] = [];
 	pos: number = 0;
 	numElements: number;
+	gaps: number[] = [5, 3, 1];
 
 	constructor(numElements: number) {
 		this.numElements = numElements;
@@ -94,5 +98,130 @@ export class CArray {
 
 			this.dataStore[inner] = temp;
 		}
+	}
+
+	// 计算排序时间
+	static count(sort: string, num: number) {
+		const ctx = new CArray(num);
+
+		const start: number = new Date().getTime();
+		ctx[sort]();
+		const end: number = new Date().getTime();
+
+		log(`对${num}个元素，排序所用时间：`, end - start);
+	}
+
+	// 希尔排序
+	shellsort() {
+		for (let g = 0; g < this.gaps.length; ++g) {
+			for (let i = this.gaps[g]; i < this.dataStore.length; ++i) {
+				let temp = this.dataStore[i];
+				let j = i;
+				for (j; j >= this.gaps[g] && this.dataStore[j - this.gaps[g]] > temp; j -= this.gaps[g]) {
+					this.dataStore[j] = this.dataStore[j - this.gaps[g]];
+				}
+				this.dataStore[j] = temp;
+			}
+		}
+	}
+
+	// 动态间隔希尔排序
+	shellsort1() {
+		let N: number = this.dataStore.length;
+		let h: number = 1;
+
+		while (h < N / 3) {
+			h = h * 3 + 1;
+		}
+
+		while (h >= 1) {
+			for (let i = h; i < N; i++) {
+				for (let j = i; j >= h && this.dataStore[j] < this.dataStore[j - h]; j -= h) {
+					this.swap(this.dataStore, j, j - h);
+				}
+			}
+			h = (h - 1) / 3;
+		}
+	}
+
+	// 归并排序
+	mergeArray(arr: number[], startLeft: number, stopLeft: number, startRight: number, stopRight: number) {
+		let rightArr: number[] = new Array(stopRight - startRight + 1);
+		let leftArr: number[] = new Array(stopLeft - startLeft + 1);
+
+		let k: number = startRight;
+		for (var i = 0; i < (rightArr.length - 1); ++i) {
+			rightArr[i] = arr[k];
+			++k;
+		}
+
+		k = startLeft;
+		for (var i = 0; i < (leftArr.length - 1); ++i) {
+			leftArr[i] = arr[k];
+			++k;
+		}
+
+		rightArr[rightArr.length - 1] = Infinity; // 哨兵值
+		leftArr[leftArr.length - 1] = Infinity; // 哨兵值 
+
+		let m = 0;
+		let n = 0;
+		for (let k = startLeft; k < stopRight; ++k) {
+			if (leftArr[m] <= rightArr[n]) {
+				arr[k] = leftArr[m];
+				m++;
+			} else {
+				arr[k] = rightArr[n];
+				n++;
+			}
+		}
+		log("left array - ", leftArr);
+		log("right array - ", rightArr);
+	}
+
+	mergeSort() {
+		if (this.dataStore.length < 2) {
+			return;
+		}
+
+		let step: number = 1;
+		let left: number, right: number;
+
+		while (step < this.dataStore.length) {
+			left = 0;
+			right = step;
+
+			while (right + step <= this.dataStore.length) {
+				this.mergeArray(this.dataStore, left, left + step, right, right + step);
+				left = right + step;
+				right = left + step;
+			}
+
+			if (right < this.dataStore.length) {
+				this.mergeArray(this.dataStore, left, left + step, right, this.dataStore.length);
+			}
+
+			step *= 2;
+		}
+	}
+	// 快速排序
+	qSort(list: number[]): Array<number> {
+		if (list.length === 0) {
+			return [];
+		}
+
+		let lesser: number[] = [];
+		let greater: number[] = [];
+		let pivot: number = list[0];
+
+		for (let i = 1; i < list.length; i++) {
+			if (list[i] < pivot) {
+				lesser.push(list[i]);
+			} else {
+				greater.push(list[i]);
+			}
+		}
+
+		return this.qSort(lesser).concat(pivot, this.qSort(greater));
 	}
 }
