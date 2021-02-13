@@ -1,5 +1,6 @@
 # Arithmetic
 * 参考书：数据结构与算法JavaScript描述
+* 迭代计划：将环境转为浏览器环境下的前端工程，包含算法的运行和内容
 
 ## 清单
 * structure
